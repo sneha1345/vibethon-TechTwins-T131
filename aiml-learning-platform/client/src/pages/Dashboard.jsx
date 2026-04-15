@@ -273,7 +273,7 @@ export default function Dashboard() {
         <aside className="vb-sidebar">
           <div className="vb-logo">
             <div className="vb-logo-ring"><div className="vb-logo-dot" /></div>
-            <span className="vb-logo-text">VIBETHON</span>
+            <span className="vb-logo-text">AIMLify</span>
           </div>
 
           <span className="vb-nav-label">Menu</span>

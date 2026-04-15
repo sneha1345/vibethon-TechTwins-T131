@@ -589,7 +589,7 @@ export default function Learn() {
         <div className="lrn-header">
           <div className="lrn-logo">
             <div className="lrn-logo-ring"><div className="lrn-logo-dot" /></div>
-            <span className="lrn-logo-text">AIML LEARN</span>
+            <span className="lrn-logo-text">AIMLify </span>
           </div>
           <button className="lrn-back-btn" onClick={() => navigate('/dashboard')}>
             <ArrowLeft /> Dashboard

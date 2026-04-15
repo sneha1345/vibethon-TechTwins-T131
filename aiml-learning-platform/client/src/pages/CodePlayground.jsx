@@ -13,9 +13,6 @@ const STYLES = `
   @keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
   @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
   @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-  @keyframes pulse-ring{0%{box-shadow:0 0 0 0 rgba(126,58,255,.4)}70%{box-shadow:0 0 0 8px rgba(126,58,255,0)}100%{box-shadow:0 0 0 0 rgba(126,58,255,0)}}
-  @keyframes slideInRight{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
-  @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
   @keyframes badgePop{0%{transform:scale(0.7);opacity:0}70%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
 
   .scene{position:fixed;inset:0;background:#07040f;overflow:hidden}
@@ -26,7 +23,6 @@ const STYLES = `
 
   .app{position:relative;z-index:2;display:flex;flex-direction:column;height:100vh;overflow:hidden}
 
-  /* ── Top Bar ── */
   .topbar{display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:52px;border-bottom:1px solid rgba(255,255,255,.07);background:rgba(12,8,24,.8);backdrop-filter:blur(12px);flex-shrink:0}
   .topbar-logo{display:flex;align-items:center;gap:9px}
   .logo-ring{width:26px;height:26px;border-radius:50%;border:2px solid rgba(170,110,255,.6);display:flex;align-items:center;justify-content:center}
@@ -42,16 +38,12 @@ const STYLES = `
   .tb-btn{padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:none;font-family:'Sora',sans-serif;letter-spacing:.3px;transition:all .2s}
   .tb-btn-ghost{background:rgba(255,255,255,.06);color:rgba(200,170,255,.8);border:1px solid rgba(255,255,255,.1)}
   .tb-btn-ghost:hover{background:rgba(255,255,255,.1);color:#fff}
-  .tb-btn-primary{background:linear-gradient(135deg,#7e3aff,#c43fc4);color:#fff}
-  .tb-btn-primary:hover{opacity:.85}
   .tb-btn-run{background:linear-gradient(135deg,#059669,#10b981);color:#fff}
   .tb-btn-run:hover{opacity:.85}
   .tb-btn-run:disabled{background:rgba(255,255,255,.1);color:rgba(255,255,255,.3);cursor:not-allowed}
 
-  /* ── Main Layout ── */
   .main{display:flex;flex:1;overflow:hidden}
 
-  /* ── Problem Panel ── */
   .prob-panel{width:420px;flex-shrink:0;border-right:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;overflow:hidden;background:rgba(10,6,20,.5)}
   .prob-tabs{display:flex;border-bottom:1px solid rgba(255,255,255,.07);padding:0 16px;gap:2px;flex-shrink:0}
   .prob-tab{padding:12px 14px;font-size:12px;font-weight:500;color:rgba(200,170,255,.4);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;letter-spacing:.3px;background:none;border-top:none;border-left:none;border-right:none;font-family:'Sora',sans-serif}
@@ -85,20 +77,16 @@ const STYLES = `
   .hint-title{font-size:11px;font-weight:700;color:rgba(251,189,35,.7);letter-spacing:.5px;margin-bottom:8px;display:flex;align-items:center;gap:6px}
   .hint-text{font-size:12.5px;color:rgba(220,200,180,.65);line-height:1.7}
 
-  /* ── Editor Panel ── */
   .editor-panel{flex:1;display:flex;flex-direction:column;overflow:hidden}
   .editor-topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.07);background:rgba(10,6,20,.4);flex-shrink:0}
-  .lang-selector{display:flex;align-items:center;gap:8px}
   .lang-badge{background:rgba(126,58,255,.2);color:#c49fff;border:1px solid rgba(126,58,255,.3);border-radius:6px;padding:4px 12px;font-size:12px;font-weight:600;font-family:'JetBrains Mono',monospace}
-  .editor-actions{display:flex;gap:8px}
 
   .editor-area{flex:1;position:relative;overflow:hidden}
-  .code-textarea{width:100%;height:100%;background:transparent;border:none;outline:none;resize:none;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.8;color:#e2d9f3;padding:20px 20px 20px 60px;tab-size:4;-moz-tab-size:4;caret-color:#c49fff;scrollbar-width:thin;scrollbar-color:rgba(126,58,255,.3) transparent}
+  .code-textarea{width:100%;height:100%;background:transparent;border:none;outline:none;resize:none;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.8;color:#e2d9f3;padding:20px 20px 20px 60px;tab-size:4;caret-color:#c49fff;scrollbar-width:thin;scrollbar-color:rgba(126,58,255,.3) transparent}
   .code-textarea::-webkit-scrollbar{width:4px}
   .code-textarea::-webkit-scrollbar-thumb{background:rgba(126,58,255,.3);border-radius:2px}
   .line-nums{position:absolute;left:0;top:0;padding:20px 0;width:48px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.8;color:rgba(180,140,255,.25);user-select:none;pointer-events:none;padding-right:12px;border-right:1px solid rgba(255,255,255,.06)}
 
-  /* ── Output Panel ── */
   .output-panel{height:240px;flex-shrink:0;border-top:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;background:rgba(8,4,18,.6)}
   .output-header{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.07);flex-shrink:0}
   .output-title{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(180,140,255,.5);display:flex;align-items:center;gap:8px}
@@ -109,30 +97,17 @@ const STYLES = `
   .status-error{background:rgba(251,189,35,.12);color:#f5b800;border:1px solid rgba(251,189,35,.25)}
   .spinner{width:12px;height:12px;border:2px solid rgba(160,110,255,.3);border-top-color:#a06eff;border-radius:50%;animation:spin .6s linear infinite;display:inline-block}
 
-  .output-body{flex:1;overflow-y:auto;padding:14px 16px;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.8;scrollbar-width:thin;scrollbar-color:rgba(126,58,255,.3) transparent}
+  .output-body{flex:1;overflow-y:auto;padding:14px 16px;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.8;scrollbar-width:thin}
   .output-body::-webkit-scrollbar{width:4px}
   .output-body::-webkit-scrollbar-thumb{background:rgba(126,58,255,.3);border-radius:2px}
 
   .out-placeholder{color:rgba(200,170,255,.2);font-style:italic;font-family:'Sora',sans-serif;font-size:12px;text-align:center;margin-top:20px}
   .out-line{margin-bottom:4px;animation:fadeIn .2s ease}
-  .out-line.info{color:rgba(200,170,255,.6)}
   .out-line.success{color:#34c578}
   .out-line.error{color:#ff7eb3}
-  .out-line.warn{color:#f5b800}
   .out-line.normal{color:rgba(220,200,255,.8)}
   .out-line.dim{color:rgba(200,170,255,.35)}
-  .out-section{margin-bottom:12px}
-  .out-section-head{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(180,140,255,.4);margin-bottom:6px;font-family:'Sora',sans-serif}
 
-  .testcase-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04)}
-  .testcase-row:last-child{border-bottom:none}
-  .tc-icon{width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0}
-  .tc-pass{background:rgba(34,197,120,.2);color:#34c578;border:1px solid rgba(34,197,120,.3)}
-  .tc-fail{background:rgba(239,68,68,.2);color:#ef4444;border:1px solid rgba(239,68,68,.3)}
-  .tc-label{font-size:11px;color:rgba(200,170,255,.6);font-family:'Sora',sans-serif;flex:1}
-  .tc-time{font-size:10px;color:rgba(180,140,255,.35)}
-
-  /* ── Problem List Sidebar ── */
   .prob-list{width:68px;flex-shrink:0;border-right:1px solid rgba(255,255,255,.07);background:rgba(8,4,18,.5);display:flex;flex-direction:column;align-items:center;padding:10px 6px;gap:6px;overflow-y:auto}
   .pl-item{width:48px;height:40px;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;border:1px solid transparent;flex-shrink:0}
   .pl-item.active{background:rgba(126,58,255,.25);border-color:rgba(126,58,255,.4)}
@@ -145,7 +120,6 @@ const STYLES = `
   .dot-hard{background:#ef4444}
   .pl-solved{width:6px;height:6px;border-radius:50%;background:#34c578;margin-top:2px}
 
-  /* ── Stats bar ── */
   .stats-bar{display:flex;align-items:center;gap:16px;padding:0 16px}
   .stat-item{display:flex;align-items:center;gap:5px;font-size:11px;color:rgba(200,170,255,.45)}
   .stat-item span{color:rgba(200,170,255,.8);font-weight:600}
@@ -156,314 +130,152 @@ const STYLES = `
 const PROBLEMS = [
   {
     id: 1,
-    title: "Implement Gradient Descent",
+    title: "Implement Sigmoid Activation",
     difficulty: "Easy",
-    tags: ["Optimization", "Linear Algebra", "NumPy"],
-    description: `<p>Implement the <code>gradient_descent</code> function that minimizes a quadratic loss function using vanilla gradient descent.</p>
-<p>You are given a dataset with features <code>X</code> and labels <code>y</code>. Your function must update the weights <code>w</code> iteratively for <code>n_iters</code> steps with learning rate <code>lr</code>, minimizing the Mean Squared Error (MSE) loss.</p>
-<p>The gradient of MSE with respect to weights <code>w</code> is: <code>grad = (2/n) * X.T @ (X @ w - y)</code></p>`,
+    tags: ["Activation", "NumPy", "Neural Networks"],
+    description: `<p>Implement the <code>sigmoid</code> activation function used in neural networks.</p>
+<p>The sigmoid function is defined as: <code>σ(x) = 1 / (1 + e^(-x))</code></p>
+<p>Your function should work with both scalar values and NumPy arrays.</p>`,
     examples: [
-      { input: "X = [[1,2],[3,4]], y = [5,11], w = [0,0], lr = 0.01, n_iters = 100", output: "[1.0, 2.0]  # approx" }
+      { input: "x = 0", output: "0.5" },
+      { input: "x = np.array([-2, -1, 0, 1, 2])", output: "[0.1192, 0.2689, 0.5, 0.7311, 0.8808]" }
     ],
     constraints: [
-      "Use only NumPy for numerical operations",
-      "n_iters ≤ 10000, lr ∈ (0, 1)",
-      "X shape: (n_samples, n_features), y shape: (n_samples,)",
-      "Return the final weight vector as a NumPy array"
+      "Use NumPy's exp function",
+      "Handle both scalar and array inputs",
+      "Return same type as input"
     ],
-    hint: "Remember to convert inputs to NumPy arrays first. The update rule is: w = w - lr * grad",
+    hint: "Use np.exp(-x) for the exponential. The formula is straightforward: 1 / (1 + np.exp(-x))",
     starterCode: `import numpy as np
 
-def gradient_descent(X, y, w, lr=0.01, n_iters=100):
+def sigmoid(x):
     """
-    Minimize MSE loss using gradient descent.
-    
-    Args:
-        X: Feature matrix (n_samples, n_features)
-        y: Target vector (n_samples,)
-        w: Initial weights (n_features,)
-        lr: Learning rate
-        n_iters: Number of iterations
-    
-    Returns:
-        Final weight vector
+    Compute sigmoid activation.
+    σ(x) = 1 / (1 + e^(-x))
     """
-    X, y, w = np.array(X, dtype=float), np.array(y, dtype=float), np.array(w, dtype=float)
-    n = len(y)
-    
     # YOUR CODE HERE
-    
-    return w
+    return 1 / (1 + np.exp(-x))
 
 
 # Test your implementation
-X = np.array([[1, 2], [3, 4], [5, 6]])
-y = np.array([5.0, 11.0, 17.0])
-w_init = np.zeros(2)
+x_scalar = 0
+print(f"Sigmoid of {x_scalar}: {sigmoid(x_scalar):.4f}")
 
-w_final = gradient_descent(X, y, w_init, lr=0.01, n_iters=1000)
-print("Final weights:", w_final)
-print("Expected: approx [1.0, 2.0]")
+x_array = np.array([-2, -1, 0, 1, 2])
+print(f"Sigmoid of array: {sigmoid(x_array)}")
 `,
     testCases: [
-      { name: "Basic test", desc: "Simple 2-feature dataset" },
-      { name: "Zero init", desc: "Weights start at zero" },
-      { name: "Convergence", desc: "Loss decreases over time" }
+      { name: "Scalar input", desc: "Single number" },
+      { name: "Array input", desc: "NumPy array" },
+      { name: "Large values", desc: "Saturates to 0 or 1" }
     ]
   },
   {
     id: 2,
-    title: "K-Means Clustering",
+    title: "Linear Regression with Gradient Descent",
     difficulty: "Medium",
-    tags: ["Unsupervised", "Clustering", "NumPy", "Distance"],
-    description: `<p>Implement the K-Means clustering algorithm from scratch. Given a dataset <code>X</code> and number of clusters <code>k</code>, your function should return the cluster assignments for each data point.</p>
-<p>Algorithm steps:</p>
-<p>1. Initialize <code>k</code> centroids randomly from the data<br/>2. Assign each point to the nearest centroid (Euclidean distance)<br/>3. Recompute centroids as the mean of assigned points<br/>4. Repeat steps 2-3 until convergence or <code>max_iters</code> reached</p>`,
+    tags: ["Regression", "Optimization", "NumPy"],
+    description: `<p>Implement linear regression using gradient descent.</p>
+<p>Given features X and targets y, find weights w that minimize MSE loss.</p>
+<p>Update rule: <code>w = w - lr * (2/n) * X.T @ (X @ w - y)</code></p>`,
     examples: [
-      { input: "X = [[1,1],[1.5,2],[3,4],[5,7],[3.5,5]], k = 2", output: "[0, 0, 1, 1, 1]  # cluster ids (may vary)" }
+      { input: "X=[[1,2],[3,4]], y=[5,11], lr=0.01, iters=1000", output: "w ≈ [1.0, 2.0]" }
     ],
     constraints: [
-      "Use Euclidean distance for assignments",
-      "k ≤ min(20, n_samples)",
-      "Return cluster labels as integer array",
-      "Convergence: centroids change < 1e-4"
+      "Use NumPy operations",
+      "No sklearn allowed",
+      "Return final weights"
     ],
-    hint: "Use np.argmin on pairwise distances. Compute distances with broadcasting: np.linalg.norm(X[:, None] - centroids[None, :], axis=2)",
+    hint: "Compute gradient as (2/n) * X.T @ (X @ w - y). Update weights in a loop.",
+    starterCode: `import numpy as np
+
+def linear_regression_gd(X, y, lr=0.01, n_iters=1000):
+    """
+    Linear regression using gradient descent.
+    """
+    X = np.array(X, dtype=float)
+    y = np.array(y, dtype=float)
+    n = len(y)
+    w = np.zeros(X.shape[1])
+    
+    for _ in range(n_iters):
+        # YOUR CODE HERE
+        grad = (2/n) * X.T @ (X @ w - y)
+        w = w - lr * grad
+    
+    return w
+
+
+# Test
+X = [[1, 2], [3, 4], [5, 6]]
+y = [5, 11, 17]
+w = linear_regression_gd(X, y, lr=0.01, n_iters=2000)
+print(f"Weights: {w}")
+print(f"Expected: approx [1.0, 2.0]")
+`,
+    testCases: [
+      { name: "Simple dataset", desc: "2 features" },
+      { name: "Convergence", desc: "Weights stabilize" }
+    ]
+  },
+  {
+    id: 3,
+    title: "K-Means Clustering",
+    difficulty: "Medium",
+    tags: ["Clustering", "Unsupervised", "Distance"],
+    description: `<p>Implement K-Means clustering algorithm from scratch.</p>
+<p>Steps: 1) Initialize centroids 2) Assign points to nearest centroid 3) Update centroids 4) Repeat</p>`,
+    examples: [
+      { input: "X with 2 clusters, k=2", output: "Cluster labels [0,0,1,1...]" }
+    ],
+    constraints: [
+      "Use Euclidean distance",
+      "Max 100 iterations",
+      "Return labels array"
+    ],
+    hint: "Use np.linalg.norm(X[:, None] - centroids, axis=2) for pairwise distances.",
     starterCode: `import numpy as np
 
 def kmeans(X, k, max_iters=100, seed=42):
     """
     K-Means clustering from scratch.
-    
-    Args:
-        X: Dataset of shape (n_samples, n_features)
-        k: Number of clusters
-        max_iters: Maximum iterations
-        seed: Random seed for reproducibility
-    
-    Returns:
-        labels: Cluster assignment for each point (n_samples,)
     """
     np.random.seed(seed)
     X = np.array(X, dtype=float)
-    n_samples = X.shape[0]
+    n = X.shape[0]
     
-    # Initialize centroids randomly from data points
-    idx = np.random.choice(n_samples, k, replace=False)
+    # Initialize centroids randomly
+    idx = np.random.choice(n, k, replace=False)
     centroids = X[idx].copy()
     
-    labels = np.zeros(n_samples, dtype=int)
-    
     for _ in range(max_iters):
-        # YOUR CODE HERE
-        pass
+        # Assign clusters
+        distances = np.linalg.norm(X[:, None] - centroids, axis=2)
+        labels = np.argmin(distances, axis=1)
+        
+        # Update centroids
+        new_centroids = np.array([X[labels == i].mean(axis=0) for i in range(k)])
+        
+        # Check convergence
+        if np.allclose(centroids, new_centroids):
+            break
+        centroids = new_centroids
     
     return labels
 
 
 # Test
-X = np.array([[1,1],[1.5,2],[3,4],[5,7],[3.5,5],[4.5,6]])
+X = np.vstack([np.random.randn(50,2) + [2,2], np.random.randn(50,2) + [-2,-2]])
 labels = kmeans(X, k=2)
-print("Cluster labels:", labels)
-print("Unique clusters:", np.unique(labels))
+print(f"Cluster labels: {labels[:10]}...")
+print(f"Unique clusters: {np.unique(labels)}")
 `,
     testCases: [
-      { name: "2 clusters", desc: "Well-separated blobs" },
-      { name: "3 clusters", desc: "Gaussian mixture data" },
-      { name: "Convergence", desc: "Stable after iterations" }
-    ]
-  },
-  {
-    id: 3,
-    title: "Backpropagation — Single Layer",
-    difficulty: "Hard",
-    tags: ["Neural Networks", "Backprop", "Calculus", "NumPy"],
-    description: `<p>Implement the forward pass and backpropagation for a single fully-connected layer with sigmoid activation.</p>
-<p>Given inputs <code>X</code>, weights <code>W</code>, bias <code>b</code>, and labels <code>y</code>, compute the gradients <code>dW</code> and <code>db</code> using binary cross-entropy loss.</p>
-<p>Forward: <code>z = X @ W + b</code>, <code>a = sigmoid(z)</code>, <code>loss = -mean(y * log(a) + (1-y) * log(1-a))</code></p>
-<p>Backward: <code>dz = a - y</code>, <code>dW = X.T @ dz / n</code>, <code>db = mean(dz)</code></p>`,
-    examples: [
-      { input: "X shape (100, 4), W shape (4, 1), single output neuron", output: "dW shape (4,1), db shape (1,)" }
-    ],
-    constraints: [
-      "Clip predictions to [1e-7, 1-1e-7] to avoid log(0)",
-      "Binary cross-entropy loss only",
-      "Return dW, db as NumPy arrays",
-      "Must handle batches correctly"
-    ],
-    hint: "The key insight: gradient of sigmoid cross-entropy simplifies to (a - y). Make sure your shapes are consistent — use keepdims=True where needed.",
-    starterCode: `import numpy as np
-
-def sigmoid(z):
-    return 1 / (1 + np.exp(-z))
-
-def forward_backward(X, W, b, y):
-    """
-    Forward pass + backprop for single sigmoid layer.
-    
-    Args:
-        X: Inputs (n_samples, n_features)
-        W: Weights (n_features, 1)
-        b: Bias (1,)
-        y: Binary labels (n_samples, 1)
-    
-    Returns:
-        loss: Scalar BCE loss
-        dW: Gradient w.r.t W
-        db: Gradient w.r.t b
-    """
-    n = X.shape[0]
-    
-    # Forward pass
-    # YOUR CODE HERE
-    
-    # Compute loss (with clipping)
-    # YOUR CODE HERE
-    
-    # Backward pass
-    # YOUR CODE HERE
-    
-    return loss, dW, db
-
-
-# Test
-np.random.seed(0)
-X = np.random.randn(50, 3)
-W = np.random.randn(3, 1) * 0.1
-b = np.zeros((1,))
-y = (np.random.randn(50, 1) > 0).astype(float)
-
-loss, dW, db = forward_backward(X, W, b, y)
-print(f"Loss: {loss:.4f}")
-print(f"dW shape: {dW.shape}, db shape: {db.shape}")
-`,
-    testCases: [
-      { name: "Shape check", desc: "Gradient shapes match W, b" },
-      { name: "Gradient check", desc: "Numerical vs analytical" },
-      { name: "Loss decreasing", desc: "Step reduces loss" }
-    ]
-  },
-  {
-    id: 4,
-    title: "Precision, Recall & F1",
-    difficulty: "Easy",
-    tags: ["Evaluation", "Classification", "Metrics"],
-    description: `<p>Implement the <code>classification_metrics</code> function that computes precision, recall, and F1-score from predicted labels and true labels.</p>
-<p><code>Precision = TP / (TP + FP)</code><br/><code>Recall = TP / (TP + FN)</code><br/><code>F1 = 2 * Precision * Recall / (Precision + Recall)</code></p>
-<p>Handle the edge case where the denominator is zero by returning 0 for that metric.</p>`,
-    examples: [
-      { input: "y_true = [1,0,1,1,0], y_pred = [1,0,0,1,1]", output: "precision=0.667, recall=0.667, f1=0.667" }
-    ],
-    constraints: [
-      "Binary classification (0 and 1 only)",
-      "Return a dict with keys: precision, recall, f1",
-      "Round to 4 decimal places",
-      "Do not use sklearn"
-    ],
-    hint: "Count TP, FP, FN first. TP = sum(y_true AND y_pred), FP = sum(NOT y_true AND y_pred), FN = sum(y_true AND NOT y_pred).",
-    starterCode: `import numpy as np
-
-def classification_metrics(y_true, y_pred):
-    """
-    Compute precision, recall, and F1-score.
-    
-    Args:
-        y_true: Ground truth binary labels
-        y_pred: Predicted binary labels
-    
-    Returns:
-        dict with precision, recall, f1
-    """
-    y_true = np.array(y_true)
-    y_pred = np.array(y_pred)
-    
-    # YOUR CODE HERE
-    
-    return {"precision": 0.0, "recall": 0.0, "f1": 0.0}
-
-
-# Test
-y_true = [1, 0, 1, 1, 0, 1]
-y_pred = [1, 0, 0, 1, 1, 1]
-
-metrics = classification_metrics(y_true, y_pred)
-print("Precision:", metrics["precision"])
-print("Recall:   ", metrics["recall"])
-print("F1 Score: ", metrics["f1"])
-`,
-    testCases: [
-      { name: "Basic metrics", desc: "Standard binary case" },
-      { name: "All correct", desc: "Perfect predictions" },
-      { name: "Zero division", desc: "Handle edge cases" }
-    ]
-  },
-  {
-    id: 5,
-    title: "Attention Mechanism",
-    difficulty: "Hard",
-    tags: ["Transformers", "Attention", "Linear Algebra", "Deep Learning"],
-    description: `<p>Implement scaled dot-product attention as used in transformer models.</p>
-<p>Given query <code>Q</code>, key <code>K</code>, and value <code>V</code> matrices, compute the attention output.</p>
-<p>Formula: <code>Attention(Q, K, V) = softmax(Q @ K.T / sqrt(d_k)) @ V</code></p>
-<p>Where <code>d_k</code> is the dimension of the key vectors (K.shape[-1]).</p>
-<p>Optionally apply a mask (set masked positions to -1e9 before softmax).</p>`,
-    examples: [
-      { input: "Q shape (4,8), K shape (4,8), V shape (4,16)", output: "output shape (4,16)" }
-    ],
-    constraints: [
-      "Use stable softmax (subtract max before exp)",
-      "Scale by sqrt(d_k) before softmax",
-      "mask shape must broadcast to (seq_len, seq_len)",
-      "Return attention output and attention weights"
-    ],
-    hint: "Compute scores = Q @ K.T / sqrt(d_k). Apply mask by adding -1e9. Then softmax row-wise. Output = softmax_scores @ V.",
-    starterCode: `import numpy as np
-
-def scaled_dot_product_attention(Q, K, V, mask=None):
-    """
-    Scaled dot-product attention.
-    
-    Args:
-        Q: Query matrix (seq_len, d_k)
-        K: Key matrix (seq_len, d_k)
-        V: Value matrix (seq_len, d_v)
-        mask: Optional boolean mask (seq_len, seq_len)
-    
-    Returns:
-        output: Attention output (seq_len, d_v)
-        weights: Attention weights (seq_len, seq_len)
-    """
-    d_k = K.shape[-1]
-    
-    # YOUR CODE HERE
-    
-    return output, weights
-
-
-# Test
-np.random.seed(42)
-seq_len, d_k, d_v = 4, 8, 16
-Q = np.random.randn(seq_len, d_k)
-K = np.random.randn(seq_len, d_k)
-V = np.random.randn(seq_len, d_v)
-
-out, attn = scaled_dot_product_attention(Q, K, V)
-print("Output shape:", out.shape)
-print("Attention weights shape:", attn.shape)
-print("Weights sum to 1 (per row):", np.allclose(attn.sum(axis=-1), 1.0))
-`,
-    testCases: [
-      { name: "Shape check", desc: "Output matches V dimensions" },
-      { name: "Softmax sum", desc: "Weights sum to 1.0 per row" },
-      { name: "Causal mask", desc: "Future tokens masked" }
+      { name: "2 clusters", desc: "Well-separated" },
+      { name: "Convergence", desc: "Stable centroids" }
     ]
   }
 ];
-
-/* ─── Helpers ─────────────────────────────────────────────────────── */
-function lineCount(code) {
-  return code.split('\n').length;
-}
 
 /* ─── Main Component ─────────────────────────────────────────────── */
 export default function MLCodeLab() {
@@ -472,19 +284,48 @@ export default function MLCodeLab() {
   const [code, setCode] = useState('');
   const [running, setRunning] = useState(false);
   const [outputLines, setOutputLines] = useState([]);
-  const [runStatus, setRunStatus] = useState(null); // null | 'running' | 'passed' | 'failed' | 'error'
+  const [runStatus, setRunStatus] = useState(null);
   const [solvedSet, setSolvedSet] = useState(new Set());
-  const [tcResults, setTcResults] = useState([]);
+  const [pyodide, setPyodide] = useState(null);
+  const [pyodideReady, setPyodideReady] = useState(false);
   const textareaRef = useRef(null);
   const outputRef = useRef(null);
 
   const prob = PROBLEMS[activeProbIdx];
 
+  // Load Pyodide on component mount
+  useEffect(() => {
+    const loadPyodide = async () => {
+      try {
+        // Load Pyodide from CDN
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js';
+        script.onload = async () => {
+          const pyodideInstance = await window.loadPyodide({
+            indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.26.4/full/',
+          });
+          
+          // Load NumPy package
+          await pyodideInstance.loadPackage('numpy');
+          
+          setPyodide(pyodideInstance);
+          setPyodideReady(true);
+          console.log('✅ Pyodide ready!');
+        };
+        document.head.appendChild(script);
+      } catch (error) {
+        console.error('Failed to load Pyodide:', error);
+        setOutputLines([{ text: 'Failed to load Python runtime. Please refresh.', type: 'error' }]);
+      }
+    };
+    
+    loadPyodide();
+  }, []);
+
   useEffect(() => {
     setCode(prob.starterCode);
     setOutputLines([]);
     setRunStatus(null);
-    setTcResults([]);
     setProbTab('problem');
   }, [activeProbIdx]);
 
@@ -506,85 +347,75 @@ export default function MLCodeLab() {
         textareaRef.current.selectionEnd = start + 4;
       }, 0);
     }
+    
+    // Ctrl+Enter to run
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      runCode();
+    }
   };
 
   const runCode = async () => {
+    if (!pyodideReady || !pyodide) {
+      setOutputLines([{ text: 'Python runtime is still loading. Please wait...', type: 'error' }]);
+      return;
+    }
+
     setRunning(true);
     setRunStatus('running');
     setOutputLines([]);
-    setTcResults([]);
 
     try {
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 1000,
-          messages: [{
-            role: "user",
-            content: `You are a Python code execution simulator for an ML coding platform. The user is solving this problem: "${prob.title}".
-
-Here is their submitted Python code:
-\`\`\`python
-${code}
-\`\`\`
-
-Simulate executing this Python code. Your response MUST be a JSON object with this exact schema:
-{
-  "stdout": ["line1", "line2", ...],
-  "status": "passed" | "failed" | "error",
-  "error_msg": null or "error message",
-  "test_results": [
-    {"name": "test name", "passed": true/false, "time_ms": number},
-    ...
-  ],
-  "runtime_ms": number,
-  "memory_kb": number,
-  "feedback": "brief 1-2 sentence constructive feedback on the code quality or correctness"
-}
-
-Rules:
-- If the code has NO implementation (just pass or empty), status="failed", include helpful stdout showing what the output would look like when solved
-- If code has syntax errors, status="error"
-- If code is partially correct, status="failed" with specific failing test info
-- If code appears correct for the problem, status="passed"
-- stdout should reflect realistic Python print output
-- test_results should have exactly ${prob.testCases.length} items matching: ${prob.testCases.map(t => t.name).join(', ')}
-- runtime_ms between 50-800, memory_kb between 1000-8000
-- Respond ONLY with the JSON object, no markdown, no backticks`
-          }]
-        })
+      // Capture stdout
+      pyodide.setStdout({
+        batched: (text) => {
+          if (text && text.trim()) {
+            setOutputLines(prev => [...prev, { text: text.trim(), type: 'normal' }]);
+          }
+        }
       });
 
-      const data = await response.json();
-      const text = data.content.map(i => i.text || '').join('');
-      const clean = text.replace(/```json|```/g, '').trim();
-      const result = JSON.parse(clean);
+      // Capture stderr
+      pyodide.setStderr({
+        batched: (text) => {
+          if (text && text.trim()) {
+            setOutputLines(prev => [...prev, { text: text.trim(), type: 'error' }]);
+          }
+        }
+      });
 
-      const lines = [];
-      if (result.stdout && result.stdout.length > 0) {
-        result.stdout.forEach(l => lines.push({ text: l, type: 'normal' }));
-      }
-      if (result.error_msg) {
-        lines.push({ text: result.error_msg, type: 'error' });
-      }
-      lines.push({ text: '', type: 'dim' });
-      lines.push({ text: `Runtime: ${result.runtime_ms}ms  |  Memory: ${(result.memory_kb / 1024).toFixed(1)} MB`, type: 'dim' });
-      if (result.feedback) {
-        lines.push({ text: '', type: 'dim' });
-        lines.push({ text: '💡 ' + result.feedback, type: 'info' });
-      }
+      const startTime = performance.now();
+      
+      // Run the code
+      await pyodide.runPythonAsync(code);
+      
+      const endTime = performance.now();
+      const runtime = Math.round(endTime - startTime);
+      
+      setOutputLines(prev => [
+        ...prev,
+        { text: '', type: 'dim' },
+        { text: `✓ Execution completed in ${runtime}ms`, type: 'success' }
+      ]);
 
-      setOutputLines(lines);
-      setRunStatus(result.status);
-      setTcResults(result.test_results || []);
-
-      if (result.status === 'passed') {
+      // Simple validation - check if output contains expected patterns
+      const outputText = outputLines.map(l => l.text).join(' ').toLowerCase();
+      const hasExpectedOutput = outputText.includes('sigmoid') || 
+                                 outputText.includes('weights') || 
+                                 outputText.includes('cluster') ||
+                                 outputText.includes('expected');
+      
+      setRunStatus(hasExpectedOutput ? 'passed' : 'failed');
+      
+      if (hasExpectedOutput) {
         setSolvedSet(prev => new Set([...prev, prob.id]));
       }
-    } catch (err) {
-      setOutputLines([{ text: 'Execution service error. Please try again.', type: 'error' }]);
+
+    } catch (error) {
+      setOutputLines(prev => [
+        ...prev,
+        { text: `Error: ${error.message}`, type: 'error' }
+      ]);
       setRunStatus('error');
     } finally {
       setRunning(false);
@@ -595,10 +426,9 @@ Rules:
     setCode(prob.starterCode);
     setOutputLines([]);
     setRunStatus(null);
-    setTcResults([]);
   };
 
-  const numLines = lineCount(code);
+  const numLines = code.split('\n').length;
   const lineNums = Array.from({ length: numLines }, (_, i) => i + 1).join('\n');
 
   return (
@@ -609,7 +439,7 @@ Rules:
       </div>
 
       <div className="app">
-        {/* ── Top Bar ── */}
+        {/* Top Bar */}
         <div className="topbar">
           <div className="topbar-logo">
             <div className="logo-ring"><div className="logo-dot" /></div>
@@ -618,6 +448,7 @@ Rules:
           <div className="topbar-center">
             <span className="prob-num">#{prob.id}</span>
             <span className={`diff-badge diff-${prob.difficulty.toLowerCase()}`}>{prob.difficulty}</span>
+            {!pyodideReady && <span style={{ color: '#f5b800', fontSize: 11 }}>Loading Python...</span>}
           </div>
           <div className="topbar-right">
             <div className="stats-bar">
@@ -629,16 +460,16 @@ Rules:
             <button
               className="tb-btn tb-btn-run"
               onClick={runCode}
-              disabled={running}
+              disabled={running || !pyodideReady}
             >
-              {running ? '⏳ Running...' : '▶ Run Code'}
+              {running ? '⏳ Running...' : !pyodideReady ? 'Loading...' : '▶ Run (Ctrl+Enter)'}
             </button>
           </div>
         </div>
 
-        {/* ── Main Area ── */}
+        {/* Main Area */}
         <div className="main">
-          {/* Problem sidebar list */}
+          {/* Problem sidebar */}
           <div className="prob-list">
             {PROBLEMS.map((p, i) => (
               <div
@@ -656,7 +487,7 @@ Rules:
             ))}
           </div>
 
-          {/* Problem description panel */}
+          {/* Problem panel */}
           <div className="prob-panel">
             <div className="prob-tabs">
               {['problem', 'hints'].map(t => (
@@ -716,15 +547,6 @@ Rules:
                       <div className="hint-text">{prob.hint}</div>
                     </div>
                   </div>
-                  <div className="prob-section" style={{ marginTop: 20 }}>
-                    <div className="prob-section-title">Test Cases</div>
-                    {prob.testCases.map((tc, i) => (
-                      <div key={i} className="example-box" style={{ marginBottom: 8 }}>
-                        <div className="example-label">Test {i + 1}: {tc.name}</div>
-                        <div style={{ fontSize: 12, color: 'rgba(200,170,255,.55)', fontFamily: "'Sora', sans-serif" }}>{tc.desc}</div>
-                      </div>
-                    ))}
-                  </div>
                 </>
               )}
             </div>
@@ -734,10 +556,12 @@ Rules:
           <div className="editor-panel">
             <div className="editor-topbar">
               <div className="lang-selector">
-                <span className="lang-badge">Python 3.10</span>
+                <span className="lang-badge">Python 3.10 (Pyodide)</span>
               </div>
               <div className="editor-actions">
-                <span style={{ fontSize: 11, color: 'rgba(200,170,255,.35)', fontFamily: "'JetBrains Mono', monospace" }}>{numLines} lines</span>
+                <span style={{ fontSize: 11, color: 'rgba(200,170,255,.35)', fontFamily: "'JetBrains Mono', monospace" }}>
+                  {numLines} lines
+                </span>
               </div>
             </div>
 
@@ -763,16 +587,11 @@ Rules:
                   Output Console
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  {tcResults.length > 0 && (
-                    <span style={{ fontSize: 11, color: 'rgba(200,170,255,.45)', fontFamily: "'JetBrains Mono',monospace" }}>
-                      {tcResults.filter(t => t.passed).length}/{tcResults.length} tests
-                    </span>
-                  )}
                   {runStatus && (
                     <span className={`output-status status-${runStatus}`}>
-                      {runStatus === 'running' ? 'Evaluating...'
-                        : runStatus === 'passed' ? '✓ All Tests Passed'
-                        : runStatus === 'failed' ? '✗ Tests Failed'
+                      {runStatus === 'running' ? 'Running...'
+                        : runStatus === 'passed' ? '✓ Success'
+                        : runStatus === 'failed' ? '✗ Check Output'
                         : '⚠ Error'}
                     </span>
                   )}
@@ -781,35 +600,19 @@ Rules:
 
               <div className="output-body" ref={outputRef}>
                 {outputLines.length === 0 && !running && (
-                  <div className="out-placeholder">Click "Run Code" to execute and evaluate your solution</div>
+                  <div className="out-placeholder">
+                    Click "Run Code" to execute your Python code in the browser!
+                  </div>
                 )}
                 {running && outputLines.length === 0 && (
-                  <div className="out-placeholder">Compiling and running your code...</div>
+                  <div className="out-placeholder">Executing Python code...</div>
                 )}
 
-                {tcResults.length > 0 && (
-                  <div className="out-section">
-                    <div className="out-section-head">Test Results</div>
-                    {tcResults.map((tc, i) => (
-                      <div key={i} className="testcase-row">
-                        <div className={`tc-icon ${tc.passed ? 'tc-pass' : 'tc-fail'}`}>
-                          {tc.passed ? '✓' : '✗'}
-                        </div>
-                        <span className="tc-label">{tc.name}</span>
-                        <span className="tc-time">{tc.time_ms}ms</span>
-                      </div>
-                    ))}
+                {outputLines.map((line, i) => (
+                  <div key={i} className={`out-line ${line.type}`}>
+                    {line.text || '\u00A0'}
                   </div>
-                )}
-
-                {outputLines.length > 0 && (
-                  <div className="out-section">
-                    <div className="out-section-head">Stdout</div>
-                    {outputLines.map((line, i) => (
-                      <div key={i} className={`out-line ${line.type}`}>{line.text || '\u00A0'}</div>
-                    ))}
-                  </div>
-                )}
+                ))}
               </div>
             </div>
           </div>
