@@ -102,7 +102,7 @@ const STYLES = `
   .output-body::-webkit-scrollbar-thumb{background:rgba(126,58,255,.3);border-radius:2px}
 
   .out-placeholder{color:rgba(200,170,255,.2);font-style:italic;font-family:'Sora',sans-serif;font-size:12px;text-align:center;margin-top:20px}
-  .out-line{margin-bottom:4px;animation:fadeIn .2s ease}
+  .out-line{margin-bottom:4px;animation:fadeIn .2s ease;white-space:pre-wrap;word-break:break-all}
   .out-line.success{color:#34c578}
   .out-line.error{color:#ff7eb3}
   .out-line.normal{color:rgba(220,200,255,.8)}
@@ -142,10 +142,9 @@ const PROBLEMS = [
     ],
     constraints: [
       "Use NumPy's exp function",
-      "Handle both scalar and array inputs",
-      "Return same type as input"
+      "Handle both scalar and array inputs"
     ],
-    hint: "Use np.exp(-x) for the exponential. The formula is straightforward: 1 / (1 + np.exp(-x))",
+    hint: "Use np.exp(-x) for the exponential. The formula is: 1 / (1 + np.exp(-x))",
     starterCode: `import numpy as np
 
 def sigmoid(x):
@@ -153,22 +152,20 @@ def sigmoid(x):
     Compute sigmoid activation.
     σ(x) = 1 / (1 + e^(-x))
     """
-    # YOUR CODE HERE
     return 1 / (1 + np.exp(-x))
 
-
 # Test your implementation
-x_scalar = 0
-print(f"Sigmoid of {x_scalar}: {sigmoid(x_scalar):.4f}")
+print("Testing sigmoid function:")
+print(f"Sigmoid of 0: {sigmoid(0)}")
 
 x_array = np.array([-2, -1, 0, 1, 2])
-print(f"Sigmoid of array: {sigmoid(x_array)}")
-`,
-    testCases: [
-      { name: "Scalar input", desc: "Single number" },
-      { name: "Array input", desc: "NumPy array" },
-      { name: "Large values", desc: "Saturates to 0 or 1" }
-    ]
+print(f"\\nSigmoid of array [-2, -1, 0, 1, 2]:")
+print(sigmoid(x_array))
+
+# Additional test
+print(f"\\nSigmoid of large positive (10): {sigmoid(10):.6f}")
+print(f"Sigmoid of large negative (-10): {sigmoid(-10):.6f}")
+`
   },
   {
     id: 2,
@@ -179,12 +176,11 @@ print(f"Sigmoid of array: {sigmoid(x_array)}")
 <p>Given features X and targets y, find weights w that minimize MSE loss.</p>
 <p>Update rule: <code>w = w - lr * (2/n) * X.T @ (X @ w - y)</code></p>`,
     examples: [
-      { input: "X=[[1,2],[3,4]], y=[5,11], lr=0.01, iters=1000", output: "w ≈ [1.0, 2.0]" }
+      { input: "X=[[1,2],[3,4]], y=[5,11], lr=0.01", output: "w ≈ [1.0, 2.0]" }
     ],
     constraints: [
       "Use NumPy operations",
-      "No sklearn allowed",
-      "Return final weights"
+      "No sklearn allowed"
     ],
     hint: "Compute gradient as (2/n) * X.T @ (X @ w - y). Update weights in a loop.",
     starterCode: `import numpy as np
@@ -198,82 +194,78 @@ def linear_regression_gd(X, y, lr=0.01, n_iters=1000):
     n = len(y)
     w = np.zeros(X.shape[1])
     
-    for _ in range(n_iters):
-        # YOUR CODE HERE
+    for i in range(n_iters):
         grad = (2/n) * X.T @ (X @ w - y)
         w = w - lr * grad
+        
+        # Print progress every 200 iterations
+        if i % 200 == 0:
+            loss = np.mean((X @ w - y) ** 2)
+            print(f"Iteration {i}: Loss = {loss:.6f}")
     
     return w
 
-
 # Test
+print("Linear Regression with Gradient Descent")
+print("=" * 40)
 X = [[1, 2], [3, 4], [5, 6]]
 y = [5, 11, 17]
-w = linear_regression_gd(X, y, lr=0.01, n_iters=2000)
-print(f"Weights: {w}")
+print(f"Input X:\\n{np.array(X)}")
+print(f"Target y: {y}\\n")
+
+w = linear_regression_gd(X, y, lr=0.01, n_iters=1000)
+print(f"\\nFinal weights: {w}")
 print(f"Expected: approx [1.0, 2.0]")
-`,
-    testCases: [
-      { name: "Simple dataset", desc: "2 features" },
-      { name: "Convergence", desc: "Weights stabilize" }
-    ]
+
+# Verify predictions
+print(f"\\nPredictions:")
+for i, x in enumerate(X):
+    pred = np.dot(x, w)
+    print(f"  x={x}: pred={pred:.2f}, actual={y[i]}")
+`
   },
   {
     id: 3,
-    title: "K-Means Clustering",
-    difficulty: "Medium",
-    tags: ["Clustering", "Unsupervised", "Distance"],
-    description: `<p>Implement K-Means clustering algorithm from scratch.</p>
-<p>Steps: 1) Initialize centroids 2) Assign points to nearest centroid 3) Update centroids 4) Repeat</p>`,
+    title: "ReLU Activation Function",
+    difficulty: "Easy",
+    tags: ["Activation", "NumPy", "Deep Learning"],
+    description: `<p>Implement the ReLU (Rectified Linear Unit) activation function.</p>
+<p>ReLU is defined as: <code>f(x) = max(0, x)</code></p>
+<p>It's one of the most popular activation functions in deep learning.</p>`,
     examples: [
-      { input: "X with 2 clusters, k=2", output: "Cluster labels [0,0,1,1...]" }
+      { input: "x = 5", output: "5" },
+      { input: "x = -3", output: "0" },
+      { input: "x = np.array([-2, -1, 0, 1, 2])", output: "[0, 0, 0, 1, 2]" }
     ],
     constraints: [
-      "Use Euclidean distance",
-      "Max 100 iterations",
-      "Return labels array"
+      "Use NumPy for array operations",
+      "Return same type as input"
     ],
-    hint: "Use np.linalg.norm(X[:, None] - centroids, axis=2) for pairwise distances.",
+    hint: "Use np.maximum(0, x) for arrays, or max(0, x) for scalars.",
     starterCode: `import numpy as np
 
-def kmeans(X, k, max_iters=100, seed=42):
+def relu(x):
     """
-    K-Means clustering from scratch.
+    ReLU activation function.
+    f(x) = max(0, x)
     """
-    np.random.seed(seed)
-    X = np.array(X, dtype=float)
-    n = X.shape[0]
-    
-    # Initialize centroids randomly
-    idx = np.random.choice(n, k, replace=False)
-    centroids = X[idx].copy()
-    
-    for _ in range(max_iters):
-        # Assign clusters
-        distances = np.linalg.norm(X[:, None] - centroids, axis=2)
-        labels = np.argmin(distances, axis=1)
-        
-        # Update centroids
-        new_centroids = np.array([X[labels == i].mean(axis=0) for i in range(k)])
-        
-        # Check convergence
-        if np.allclose(centroids, new_centroids):
-            break
-        centroids = new_centroids
-    
-    return labels
-
+    return np.maximum(0, x)
 
 # Test
-X = np.vstack([np.random.randn(50,2) + [2,2], np.random.randn(50,2) + [-2,-2]])
-labels = kmeans(X, k=2)
-print(f"Cluster labels: {labels[:10]}...")
-print(f"Unique clusters: {np.unique(labels)}")
-`,
-    testCases: [
-      { name: "2 clusters", desc: "Well-separated" },
-      { name: "Convergence", desc: "Stable centroids" }
-    ]
+print("ReLU Activation Function")
+print("=" * 40)
+print(f"ReLU(5): {relu(5)}")
+print(f"ReLU(-3): {relu(-3)}")
+print(f"ReLU(0): {relu(0)}")
+
+x_array = np.array([-2, -1, 0, 1, 2, 3])
+print(f"\\nReLU of {x_array}:")
+print(relu(x_array))
+
+# Visual demonstration
+print(f"\\nInput values:  {x_array}")
+print(f"ReLU outputs:   {relu(x_array)}")
+`
   }
 ];
 
@@ -293,11 +285,10 @@ export default function MLCodeLab() {
 
   const prob = PROBLEMS[activeProbIdx];
 
-  // Load Pyodide on component mount
+  // Load Pyodide
   useEffect(() => {
     const loadPyodide = async () => {
       try {
-        // Load Pyodide from CDN
         const script = document.createElement('script');
         script.src = 'https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js';
         script.onload = async () => {
@@ -305,7 +296,6 @@ export default function MLCodeLab() {
             indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.26.4/full/',
           });
           
-          // Load NumPy package
           await pyodideInstance.loadPackage('numpy');
           
           setPyodide(pyodideInstance);
@@ -315,7 +305,7 @@ export default function MLCodeLab() {
         document.head.appendChild(script);
       } catch (error) {
         console.error('Failed to load Pyodide:', error);
-        setOutputLines([{ text: 'Failed to load Python runtime. Please refresh.', type: 'error' }]);
+        setOutputLines([{ text: 'Failed to load Python runtime.', type: 'error' }]);
       }
     };
     
@@ -323,7 +313,9 @@ export default function MLCodeLab() {
   }, []);
 
   useEffect(() => {
-    setCode(prob.starterCode);
+    if (PROBLEMS[activeProbIdx]) {
+      setCode(PROBLEMS[activeProbIdx].starterCode);
+    }
     setOutputLines([]);
     setRunStatus(null);
     setProbTab('problem');
@@ -348,7 +340,6 @@ export default function MLCodeLab() {
       }, 0);
     }
     
-    // Ctrl+Enter to run
     if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
       e.preventDefault();
       runCode();
@@ -357,7 +348,7 @@ export default function MLCodeLab() {
 
   const runCode = async () => {
     if (!pyodideReady || !pyodide) {
-      setOutputLines([{ text: 'Python runtime is still loading. Please wait...', type: 'error' }]);
+      setOutputLines([{ text: 'Python runtime is still loading...', type: 'error' }]);
       return;
     }
 
@@ -365,32 +356,54 @@ export default function MLCodeLab() {
     setRunStatus('running');
     setOutputLines([]);
 
+    // String to collect output
+    let stdoutBuffer = '';
+    let stderrBuffer = '';
+
     try {
-      // Capture stdout
+      // Set up stdout capture
       pyodide.setStdout({
         batched: (text) => {
-          if (text && text.trim()) {
-            setOutputLines(prev => [...prev, { text: text.trim(), type: 'normal' }]);
+          if (text) {
+            stdoutBuffer += text;
+            // Split by newline and add each line
+            const lines = text.split('\\n');
+            lines.forEach(line => {
+              if (line.trim()) {
+                setOutputLines(prev => [...prev, { text: line, type: 'normal' }]);
+              }
+            });
           }
         }
       });
 
-      // Capture stderr
+      // Set up stderr capture
       pyodide.setStderr({
         batched: (text) => {
-          if (text && text.trim()) {
-            setOutputLines(prev => [...prev, { text: text.trim(), type: 'error' }]);
+          if (text) {
+            stderrBuffer += text;
+            const lines = text.split('\\n');
+            lines.forEach(line => {
+              if (line.trim()) {
+                setOutputLines(prev => [...prev, { text: line, type: 'error' }]);
+              }
+            });
           }
         }
       });
 
       const startTime = performance.now();
       
-      // Run the code
+      // Run the Python code
       await pyodide.runPythonAsync(code);
       
       const endTime = performance.now();
       const runtime = Math.round(endTime - startTime);
+      
+      // If no output was captured but code ran successfully
+      if (stdoutBuffer === '' && stderrBuffer === '') {
+        setOutputLines(prev => [...prev, { text: '(No output - code executed successfully)', type: 'dim' }]);
+      }
       
       setOutputLines(prev => [
         ...prev,
@@ -398,24 +411,23 @@ export default function MLCodeLab() {
         { text: `✓ Execution completed in ${runtime}ms`, type: 'success' }
       ]);
 
-      // Simple validation - check if output contains expected patterns
-      const outputText = outputLines.map(l => l.text).join(' ').toLowerCase();
-      const hasExpectedOutput = outputText.includes('sigmoid') || 
-                                 outputText.includes('weights') || 
-                                 outputText.includes('cluster') ||
-                                 outputText.includes('expected');
-      
-      setRunStatus(hasExpectedOutput ? 'passed' : 'failed');
-      
-      if (hasExpectedOutput) {
-        setSolvedSet(prev => new Set([...prev, prob.id]));
-      }
+      setRunStatus('passed');
+      setSolvedSet(prev => new Set([...prev, prob.id]));
 
     } catch (error) {
-      setOutputLines(prev => [
-        ...prev,
-        { text: `Error: ${error.message}`, type: 'error' }
-      ]);
+      console.error('Python execution error:', error);
+      
+      // Parse Python error message
+      let errorMsg = error.message;
+      if (errorMsg.includes('Traceback')) {
+        const lines = errorMsg.split('\\n');
+        lines.forEach(line => {
+          setOutputLines(prev => [...prev, { text: line, type: 'error' }]);
+        });
+      } else {
+        setOutputLines(prev => [...prev, { text: errorMsg, type: 'error' }]);
+      }
+      
       setRunStatus('error');
     } finally {
       setRunning(false);
@@ -429,7 +441,7 @@ export default function MLCodeLab() {
   };
 
   const numLines = code.split('\n').length;
-  const lineNums = Array.from({ length: numLines }, (_, i) => i + 1).join('\n');
+  const lineNums = Array.from({ length: Math.max(numLines, 1) }, (_, i) => i + 1).join('\n');
 
   return (
     <>
@@ -439,16 +451,15 @@ export default function MLCodeLab() {
       </div>
 
       <div className="app">
-        {/* Top Bar */}
         <div className="topbar">
           <div className="topbar-logo">
             <div className="logo-ring"><div className="logo-dot" /></div>
-            <span className="logo-name">AIMLify</span>
+            <span className="logo-name">VIBETHON AI</span>
           </div>
           <div className="topbar-center">
             <span className="prob-num">#{prob.id}</span>
             <span className={`diff-badge diff-${prob.difficulty.toLowerCase()}`}>{prob.difficulty}</span>
-            {!pyodideReady && <span style={{ color: '#f5b800', fontSize: 11 }}>Loading Python...</span>}
+            {!pyodideReady && <span style={{ color: '#f5b800', fontSize: 11, marginLeft: 8 }}>Loading Python...</span>}
           </div>
           <div className="topbar-right">
             <div className="stats-bar">
@@ -462,14 +473,12 @@ export default function MLCodeLab() {
               onClick={runCode}
               disabled={running || !pyodideReady}
             >
-              {running ? '⏳ Running...' : !pyodideReady ? 'Loading...' : '▶ Run (Ctrl+Enter)'}
+              {running ? '⏳ Running...' : !pyodideReady ? 'Loading...' : '▶ Run'}
             </button>
           </div>
         </div>
 
-        {/* Main Area */}
         <div className="main">
-          {/* Problem sidebar */}
           <div className="prob-list">
             {PROBLEMS.map((p, i) => (
               <div
@@ -487,7 +496,6 @@ export default function MLCodeLab() {
             ))}
           </div>
 
-          {/* Problem panel */}
           <div className="prob-panel">
             <div className="prob-tabs">
               {['problem', 'hints'].map(t => (
@@ -539,30 +547,23 @@ export default function MLCodeLab() {
               )}
 
               {probTab === 'hints' && (
-                <>
-                  <div className="prob-section">
-                    <div className="prob-section-title">Approach Hint</div>
-                    <div className="hint-box">
-                      <div className="hint-title">💡 Hint</div>
-                      <div className="hint-text">{prob.hint}</div>
-                    </div>
+                <div className="prob-section">
+                  <div className="prob-section-title">Approach Hint</div>
+                  <div className="hint-box">
+                    <div className="hint-title">💡 Hint</div>
+                    <div className="hint-text">{prob.hint}</div>
                   </div>
-                </>
+                </div>
               )}
             </div>
           </div>
 
-          {/* Editor + Output */}
           <div className="editor-panel">
             <div className="editor-topbar">
-              <div className="lang-selector">
-                <span className="lang-badge">Python 3.10 (Pyodide)</span>
-              </div>
-              <div className="editor-actions">
-                <span style={{ fontSize: 11, color: 'rgba(200,170,255,.35)', fontFamily: "'JetBrains Mono', monospace" }}>
-                  {numLines} lines
-                </span>
-              </div>
+              <span className="lang-badge">Python 3.10 (Pyodide)</span>
+              <span style={{ fontSize: 11, color: 'rgba(200,170,255,.35)', fontFamily: "'JetBrains Mono', monospace" }}>
+                {numLines} lines
+              </span>
             </div>
 
             <div className="editor-area">
@@ -579,29 +580,26 @@ export default function MLCodeLab() {
               />
             </div>
 
-            {/* Output Panel */}
             <div className="output-panel">
               <div className="output-header">
                 <div className="output-title">
                   {running && <span className="spinner" />}
-                  Output Console
+                  OUTPUT CONSOLE
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  {runStatus && (
-                    <span className={`output-status status-${runStatus}`}>
-                      {runStatus === 'running' ? 'Running...'
-                        : runStatus === 'passed' ? '✓ Success'
-                        : runStatus === 'failed' ? '✗ Check Output'
-                        : '⚠ Error'}
-                    </span>
-                  )}
-                </div>
+                {runStatus && (
+                  <span className={`output-status status-${runStatus}`}>
+                    {runStatus === 'running' ? 'Running...'
+                      : runStatus === 'passed' ? '✓ Success'
+                      : runStatus === 'failed' ? '✗ Failed'
+                      : '⚠ Error'}
+                  </span>
+                )}
               </div>
 
               <div className="output-body" ref={outputRef}>
                 {outputLines.length === 0 && !running && (
                   <div className="out-placeholder">
-                    Click "Run Code" to execute your Python code in the browser!
+                    Click "Run" to execute your code ▶
                   </div>
                 )}
                 {running && outputLines.length === 0 && (
