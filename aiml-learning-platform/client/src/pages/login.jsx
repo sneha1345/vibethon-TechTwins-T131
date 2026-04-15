@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { loginUser, registerUser } from '../services/api';
 
@@ -13,13 +13,13 @@ const STYLES = `
   @keyframes vb-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
   @keyframes vb-fadeTab{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:translateX(0)}}
 
-  .vb-scene{position:relative;width:100%;min-height:100vh;background:#07040f;overflow:hidden;display:flex;align-items:center;justify-content:center}
+  .vb-scene{position:fixed;top:0;left:0;right:0;bottom:0;width:100%;height:100%;background:#07040f;overflow:hidden auto;display:flex;align-items:center;justify-content:center}
   .vb-blob{position:absolute;border-radius:50%;filter:blur(80px);will-change:transform;pointer-events:none}
   .vb-b1{width:520px;height:520px;background:radial-gradient(circle,rgba(90,30,180,.75) 0%,transparent 70%);top:-160px;left:-120px;animation:vb-float1 12s ease-in-out infinite}
   .vb-b2{width:460px;height:460px;background:radial-gradient(circle,rgba(160,30,130,.65) 0%,transparent 70%);bottom:-130px;right:-80px;animation:vb-float2 15s ease-in-out infinite}
   .vb-b3{width:340px;height:340px;background:radial-gradient(circle,rgba(40,20,120,.8) 0%,transparent 70%);top:40%;left:55%;animation:vb-float3 10s ease-in-out infinite}
   .vb-b4{width:260px;height:260px;background:radial-gradient(circle,rgba(100,10,100,.5) 0%,transparent 70%);bottom:10%;left:10%;animation:vb-float1 18s ease-in-out infinite reverse}
-  .vb-card{position:relative;z-index:2;width:100%;max-width:420px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:40px 36px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);animation:vb-slideUp .6s ease both;margin:24px}
+  .vb-card{position:relative;z-index:2;width:100%;max-width:420px;background:rgba(15,10,25,.7);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:40px 36px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);animation:vb-slideUp .6s ease both;margin:24px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
   .vb-logo{display:flex;align-items:center;justify-content:center;gap:9px;margin-bottom:26px}
   .vb-logo-ring{width:30px;height:30px;border-radius:50%;border:2px solid rgba(180,120,255,.7);display:flex;align-items:center;justify-content:center}
   .vb-logo-dot{width:9px;height:9px;border-radius:50%;background:linear-gradient(135deg,#a06eff,#e060d0)}
@@ -57,6 +57,10 @@ const STYLES = `
   .vb-alert{background:rgba(255,100,150,.08);border:1px solid rgba(255,100,150,.2);border-radius:8px;color:#ff9eb8;font-size:13px;padding:10px 14px;margin-bottom:16px}
   .vb-success{text-align:center;padding:24px 0;animation:vb-slideUp .4s ease both}
   .vb-check{width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#7e3aff,#c43fc4);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;animation:vb-pulse 1.5s ease infinite}
+  .vb-success-actions{display:flex;gap:10px;margin-top:20px;justify-content:center}
+  .vb-success-btn{padding:10px 20px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:8px;color:#fff;font-size:13px;cursor:pointer;transition:all .2s}
+  .vb-success-btn:hover{background:rgba(255,255,255,.15)}
+  .vb-success-btn.primary{background:linear-gradient(135deg,#7e3aff,#c43fc4);border:none}
 `;
 
 /* ─── SVG icons ─────────────────────────────────────────────────────── */
@@ -96,10 +100,10 @@ function getStrength(v) {
 /* ─── Main component ─────────────────────────────────────────────────── */
 export default function Auth() {
   const navigate = useNavigate();
-  const [tab, setTab]           = useState('login');   // 'login' | 'signup'
+  const [tab, setTab]           = useState('login');
   const [loading, setLoading]   = useState(false);
   const [apiError, setApiError] = useState('');
-  const [done, setDone]         = useState(null);      // { title, sub }
+  const [signupSuccess, setSignupSuccess] = useState(false);
 
   /* login fields */
   const [lEmail, setLEmail] = useState('');
@@ -118,25 +122,26 @@ export default function Auth() {
   const switchTab = (t) => {
     setTab(t);
     setApiError('');
-    setDone(null);
+    setSignupSuccess(false);
     setLErrs({});
     setSErrs({});
   };
 
   /* ── Login submit ─────────────────────────── */
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e?.preventDefault();
     const errs = {};
     if (!lEmail || !/\S+@\S+\.\S+/.test(lEmail)) errs.email = 'Please enter a valid email';
     if (!lPass) errs.pass = 'Password is required';
     if (Object.keys(errs).length) { setLErrs(errs); return; }
+    
     setLoading(true);
     setApiError('');
     try {
       const { data } = await loginUser({ email: lEmail, password: lPass });
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data));
-      setDone({ title: 'Welcome back!', sub: 'Redirecting to your dashboard…' });
-      setTimeout(() => navigate('/dashboard'), 1800);
+      navigate('/dashboard');
     } catch (err) {
       setApiError(err.response?.data?.message || 'Login failed. Please try again.');
     } finally {
@@ -145,25 +150,49 @@ export default function Auth() {
   };
 
   /* ── Signup submit ────────────────────────── */
-  const handleSignup = async () => {
+  const handleSignup = async (e) => {
+    e?.preventDefault();
     const errs = {};
+    if (!sFirst || !sLast) errs.name = 'Please enter your full name';
     if (!sEmail || !/\S+@\S+\.\S+/.test(sEmail)) errs.email = 'Please enter a valid email';
     if (sPass.length < 8) errs.pass = 'Password must be at least 8 characters';
     if (sPass !== sPass2)  errs.pass2 = "Passwords don't match";
     if (Object.keys(errs).length) { setSErrs(errs); return; }
+    
     setLoading(true);
     setApiError('');
     try {
-      const { data } = await registerUser({ firstName: sFirst, lastName: sLast, email: sEmail, password: sPass });
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data));
-      setDone({ title: 'Account created!', sub: "You're all set — welcome to Vibethon 🎉" });
-      setTimeout(() => navigate('/dashboard'), 1800);
+      const fullName = `${sFirst} ${sLast}`.trim();
+      
+      await registerUser({ 
+        name: fullName,
+        email: sEmail, 
+        password: sPass 
+      });
+      
+      // Show success message instead of auto-login
+      setSignupSuccess(true);
+      
+      // Clear signup form
+      setSFirst('');
+      setSLast('');
+      setSEmail('');
+      setSPass('');
+      setSPass2('');
+      
     } catch (err) {
       setApiError(err.response?.data?.message || 'Sign up failed. Please try again.');
     } finally {
       setLoading(false);
     }
+  };
+
+  /* ── Handle Go to Login ───────────────────── */
+  const handleGoToLogin = () => {
+    setTab('login');
+    setSignupSuccess(false);
+    // Pre-fill email from signup
+    setLEmail(sEmail);
   };
 
   const isLogin = tab === 'login';
@@ -181,7 +210,7 @@ export default function Auth() {
           {/* Logo */}
           <div className="vb-logo">
             <div className="vb-logo-ring"><div className="vb-logo-dot" /></div>
-            <span className="vb-logo-text">VIBETHON</span>
+            <span className="vb-logo-text">AIMLify</span>
           </div>
 
           {/* Tabs */}
@@ -194,84 +223,140 @@ export default function Auth() {
           {/* API error banner */}
           {apiError && <div className="vb-alert">{apiError}</div>}
 
-          {/* Success screen */}
-          {done ? (
+          {/* Signup Success Screen */}
+          {signupSuccess ? (
             <div className="vb-success">
               <div className="vb-check"><IconCheck /></div>
-              <strong style={{ color: '#fff', fontSize: 18, display: 'block', marginBottom: 8 }}>{done.title}</strong>
-              <p style={{ color: 'rgba(255,255,255,.6)', fontSize: 14 }}>{done.sub}</p>
+              <strong style={{ color: '#fff', fontSize: 18, display: 'block', marginBottom: 8 }}>
+                Account Created!
+              </strong>
+              <p style={{ color: 'rgba(255,255,255,.6)', fontSize: 14, marginBottom: 20 }}>
+                Your account has been successfully created. Please sign in to continue.
+              </p>
+              <div className="vb-success-actions">
+                <button className="vb-success-btn primary" onClick={handleGoToLogin}>
+                  Go to Sign In
+                </button>
+              </div>
             </div>
           ) : isLogin ? (
             /* ── Login form ─────────────────────────────── */
-            <div className="vb-panel" key="login">
+            <form className="vb-panel" key="login" onSubmit={handleLogin}>
               <div className="vb-field">
                 <label>Email</label>
-                <input className="vb-input" type="email" placeholder="you@example.com"
-                  value={lEmail} onChange={e => { setLEmail(e.target.value); setLErrs(p => ({ ...p, email: '' })); }} />
+                <input 
+                  className="vb-input" 
+                  type="email" 
+                  placeholder="email address"
+                  autoComplete="email"
+                  value={lEmail} 
+                  onChange={e => { setLEmail(e.target.value); setLErrs(p => ({ ...p, email: '' })); }} 
+                />
                 {lErrs.email && <div className="vb-err">{lErrs.email}</div>}
               </div>
               <div className="vb-field">
                 <label>Password</label>
-                <input className="vb-input" type="password" placeholder="••••••••"
-                  value={lPass} onChange={e => { setLPass(e.target.value); setLErrs(p => ({ ...p, pass: '' })); }} />
+                <input 
+                  className="vb-input" 
+                  type="password" 
+                  placeholder="••••••••"
+                  autoComplete="current-password"
+                  value={lPass} 
+                  onChange={e => { setLPass(e.target.value); setLErrs(p => ({ ...p, pass: '' })); }} 
+                />
                 {lErrs.pass && <div className="vb-err">{lErrs.pass}</div>}
               </div>
               <Link to="/forgot-password" className="vb-forgot">Forgot password?</Link>
-              <button className={`vb-btn${loading ? ' loading' : ''}`} onClick={handleLogin} disabled={loading}>
+              <button className={`vb-btn${loading ? ' loading' : ''}`} type="submit" disabled={loading}>
                 <span className="vb-btn-label">Sign In</span>
               </button>
               <div className="vb-divider">or continue with</div>
               <div className="vb-socials">
-                <button className="vb-soc"><IconGoogle /> Google</button>
-                <button className="vb-soc"><IconGithub /> GitHub</button>
+                <button type="button" className="vb-soc"><IconGoogle /> Google</button>
+                <button type="button" className="vb-soc"><IconGithub /> GitHub</button>
               </div>
               <p className="vb-terms">
                 By signing in you agree to our <a href="#">Terms</a> &amp; <a href="#">Privacy</a>
               </p>
-            </div>
+            </form>
           ) : (
             /* ── Signup form ────────────────────────────── */
-            <div className="vb-panel" key="signup">
+            <form className="vb-panel" key="signup" onSubmit={handleSignup}>
               <div className="vb-row2">
                 <div className="vb-field">
                   <label>First name</label>
-                  <input className="vb-input" type="text" placeholder="Alex"
-                    value={sFirst} onChange={e => setSFirst(e.target.value)} />
+                  <input 
+                    className="vb-input" 
+                    type="text" 
+                    placeholder="first name"
+                    autoComplete="given-name"
+                    value={sFirst} 
+                    onChange={e => setSFirst(e.target.value)} 
+                  />
                 </div>
                 <div className="vb-field">
                   <label>Last name</label>
-                  <input className="vb-input" type="text" placeholder="Chen"
-                    value={sLast} onChange={e => setSLast(e.target.value)} />
+                  <input 
+                    className="vb-input" 
+                    type="text" 
+                    placeholder="last name"
+                    autoComplete="family-name"
+                    value={sLast} 
+                    onChange={e => setSLast(e.target.value)} 
+                  />
                 </div>
               </div>
+              {sErrs.name && <div className="vb-err" style={{ marginTop: '-8px', marginBottom: '8px' }}>{sErrs.name}</div>}
+              
               <div className="vb-field">
                 <label>Email</label>
-                <input className="vb-input" type="email" placeholder="you@example.com"
-                  value={sEmail} onChange={e => { setSEmail(e.target.value); setSErrs(p => ({ ...p, email: '' })); }} />
+                <input 
+                  className="vb-input" 
+                  type="email" 
+                  placeholder="email address"
+                  autoComplete="email"
+                  value={sEmail} 
+                  onChange={e => { setSEmail(e.target.value); setSErrs(p => ({ ...p, email: '' })); }} 
+                />
                 {sErrs.email && <div className="vb-err">{sErrs.email}</div>}
               </div>
+              
               <div className="vb-field">
                 <label>Password</label>
-                <input className="vb-input" type="password" placeholder="Min 8 characters"
-                  value={sPass} onChange={e => { setSPass(e.target.value); setSErrs(p => ({ ...p, pass: '' })); }} />
+                <input 
+                  className="vb-input" 
+                  type="password" 
+                  placeholder="password"
+                  autoComplete="new-password"
+                  value={sPass} 
+                  onChange={e => { setSPass(e.target.value); setSErrs(p => ({ ...p, pass: '' })); }} 
+                />
                 <div className="vb-strength">
                   <div className="vb-strength-fill" style={{ width: strength.width, background: strength.color }} />
                 </div>
                 {sErrs.pass && <div className="vb-err">{sErrs.pass}</div>}
               </div>
+              
               <div className="vb-field">
                 <label>Confirm password</label>
-                <input className="vb-input" type="password" placeholder="••••••••"
-                  value={sPass2} onChange={e => { setSPass2(e.target.value); setSErrs(p => ({ ...p, pass2: '' })); }} />
+                <input 
+                  className="vb-input" 
+                  type="password" 
+                  placeholder="••••••••"
+                  autoComplete="new-password"
+                  value={sPass2} 
+                  onChange={e => { setSPass2(e.target.value); setSErrs(p => ({ ...p, pass2: '' })); }} 
+                />
                 {sErrs.pass2 && <div className="vb-err">{sErrs.pass2}</div>}
               </div>
-              <button className={`vb-btn${loading ? ' loading' : ''}`} onClick={handleSignup} disabled={loading}>
+              
+              <button className={`vb-btn${loading ? ' loading' : ''}`} type="submit" disabled={loading}>
                 <span className="vb-btn-label">Create Account</span>
               </button>
               <p className="vb-terms">
                 By creating an account you agree to our <a href="#">Terms</a> &amp; <a href="#">Privacy Policy</a>
               </p>
-            </div>
+            </form>
           )}
         </div>
       </div>
